@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose, { mongo } from "mongoose"
 
 const jobSchema = mongoose.Schema({
     CompanyName: {
@@ -76,6 +76,11 @@ const jobSchema = mongoose.Schema({
     available: {
         type: Boolean,
         default: true,
+    },
+    employeeId: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: "User"
     }
 })
 

@@ -1,7 +1,6 @@
 import { asyncErrorHandling } from "../middlewares/asyncErrorHandling.js"
 import { createError, errorHanlder } from "../middlewares/errorHandling.js"
 import { job } from "../models/jobModel.js"
-import { user } from "../models/userModel.js"
 
 export const availableJobs = asyncErrorHandling(async (req, res) => {
     const availableJobs = await job.find({ available: true })
@@ -16,12 +15,12 @@ export const postJob = asyncErrorHandling(async (req, res) => {
         return errorHanlder(createError("you don't have acccess to this feature"), req, res)
     }
     const { CompanyName, CompanyWebsite, JobTitle, JobCategory, JobType, JobLocation, SalaryFrom, SalaryTo, Exp, Qualification, ApplicationDeadline, JobAppLink, JobDescription } = req.body
-
+    const employeeId = req.user.id
     if (!CompanyName || !CompanyWebsite || !JobTitle || !JobCategory || !JobType || !JobLocation || !SalaryFrom || !SalaryTo || !Exp || !Qualification || !ApplicationDeadline || !JobAppLink || !JobDescription) {
         return errorHanlder(createError("you cannot leave any of these empty"), req, res)
     }
     const postJob = await job.create({
-        CompanyName, CompanyWebsite, JobTitle, JobCategory, JobType, JobLocation, SalaryFrom, SalaryTo, Exp, Qualification, ApplicationDeadline, JobAppLink, JobDescription
+        CompanyName, CompanyWebsite, JobTitle, JobCategory, JobType, JobLocation, SalaryFrom, SalaryTo, Exp, Qualification, ApplicationDeadline, JobAppLink, JobDescription, employeeId
     })
     res.status(200).json({
         success: true,
@@ -67,4 +66,18 @@ export const deleteJob = asyncErrorHandling(async (req, res) => {
         success: true,
         message: "job delete successfully"
     })
+})
+
+export const myjobs = asyncErrorHandling(async (req, res) => {
+    const { role } = req.user
+    if (role === "Job Seeker") {
+        return errorHanlder(createError("you don't have acccess to this feature"), req, res)
+    }
+    const myjobs = await job.find({ employeeId: req.user.id })
+    res.status(200).send({
+        success: true,
+        message: "job created successfully",
+        myjobs
+    })
+
 })

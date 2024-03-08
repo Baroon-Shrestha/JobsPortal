@@ -1,10 +1,8 @@
-// Import necessary modules and middleware
 import { asyncErrorHandling } from "./asyncErrorHandling.js";
 import { createError, errorHanlder } from "./errorHandling.js";
 import jwt from "jsonwebtoken";
 import { user } from "../models/userModel.js";
 
-// Middleware to check if the user is authorized
 export const isAuthorized = asyncErrorHandling(async (req, res, next) => {
     const { token } = req.cookies;
 

@@ -11,6 +11,10 @@ const applicationSchema = mongoose.Schema({
         type: String,
         required: [true, " you cannot leave this empty"],
     },
+    description: {
+        type: String,
+        required: [true, " you cannot leave this empty"],
+    },
     resume: {
         public_id: {
             type: String,
@@ -21,6 +25,26 @@ const applicationSchema = mongoose.Schema({
             required: true,
         },
     },
+    applicatantID: {
+        user: {
+            type: mongoose.Types.ObjectId,
+            ref: "user",
+        },
+        role: {
+            type: String,
+            enum: "Job Seeker",
+        }
+    },
+    employeeID: {
+        user: {
+            type: mongoose.Types.ObjectId,
+            ref: "user",
+        },
+        role: {
+            type: String,
+            enum: "Employee",
+        }
+    }
 
 
 })

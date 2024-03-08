@@ -1,5 +1,4 @@
 import { asyncErrorHandling } from "../middlewares/asyncErrorHandling.js"
-import { isAuthorized } from "../middlewares/auth.js";
 import { errorHanlder, createError } from "../middlewares/errorHandling.js"
 import { user } from "../models/userModel.js"
 import { getToken } from "../utils/token.js";
@@ -46,6 +45,14 @@ export const logout = asyncErrorHandling(async (req, res) => {
     }).json({
         success: true,
         message: "logged out",
+    })
+})
+
+export const getLoggeedInUser = asyncErrorHandling(async (req, res) => {
+    const loggedInUser = await req.user
+    res.status(200).send({
+        success: true,
+        loggedInUser
     })
 })
 
